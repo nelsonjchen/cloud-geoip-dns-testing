@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
-export = async () => {
+async function createGcpResources() {
   const available = await gcp.compute.getRegions({});
   const regionNames = available.names;
 
@@ -29,4 +29,8 @@ export = async () => {
       })
     },
   });
+}
+
+export = async () => {
+  await createGcpResources();
 }

@@ -139,6 +139,7 @@ async function createAzureResources() {
 
 // Similar limitations to Azure, AWS can only have 100 endpoints per zone.
 async function createAwsResources() {
+
   // Create an upper zone with the continent Location data. These are identified by having a
   const rootHostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
     name: "aws.geoip-test.mindflakes.com",
@@ -165,6 +166,20 @@ async function createAwsResources() {
       setIdentifier: geoLocation.ContinentName,
     })
   );
+
+  const continentZones = continentGeoLocations.map((geoLocation) => {
+    const zone = new aws.route53.Zone(`${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`, {
+      name: `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+    });
+    new aws.route53.Record(`${geoLocation.ContinentName}-ns`, {
+      zoneId: rootHostedZone.zoneId,
+      name: `${geoLocation.ContinentCode.toLowerCase()}-geoip-test`,
+      type: "NS",
+      ttl: 60,
+      records: zone.nameServers.apply((nameServers) => nameServers),
+    });
+    return
+  });
 
 }
 

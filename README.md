@@ -13,6 +13,23 @@ This tool is made of:
 
 The rest of this README explains how to use the infrastructure I've set up to test DNS-based GeoIP routing.
 
+## Table of Contents
+
+- [🗺️ Cloud GeoIP via DNS Testing Tool](#️-cloud-geoip-via-dns-testing-tool)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+    - [Linux/macOS](#linuxmacos)
+    - [Windows](#windows)
+  - [Testing](#testing)
+    - [Pick a Domain](#pick-a-domain)
+    - [Query the CNAME Record for the Domain](#query-the-cname-record-for-the-domain)
+    - [Linux/macOS](#linuxmacos-1)
+    - [Windows](#windows-1)
+  - [Understanding the Output](#understanding-the-output)
+- [Pitfalls](#pitfalls)
+- [Development](#development)
+- [Useful Tools](#useful-tools)
+
 ## Prerequisites
 
 You'll need a Linux, Mac, or Windows desktop or laptop with access to a terminal or Powershell.
@@ -272,6 +289,10 @@ In these cases, please make sure you are testing from a location that is in the 
 # Pitfalls
 
 * **DNS Caching**: DNS records are cached by your ISP, your local network, and your computer. If you get unexpected results, try flushing your DNS cache or waiting a few minutes.
+  * Flushing DNS Cache on Windows: `ipconfig /flushdns`
+  * Flushing DNS Cache on macOS: `sudo killall -HUP mDNSResponder`
+  * Flushing DNS Cache on Linux: `sudo systemd-resolve --flush-caches`
+  * The above commands may be different on your system. Please consult your system's documentation.
 * **VPN**: If you are using a VPN, the DNS GeoIP system will think you are in the location of the VPN server. This can be useful for testing, but it can also give you incorrect results.
 * **It's not perfect.**: DNS-based GeoIP routing is just one of many methods that services use to determine your location. It's not always accurate, and it can be affected by many factors. As an example, IPv4 address blocks are frequently reassigned to different regions and owners, and DNS-based GeoIP routing can be slow to update.
 

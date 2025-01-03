@@ -1,6 +1,8 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
+// GCP creates a new DNS zone and record set for each GCP computing region.
+// It cannot discern by states or other boundaries.
 async function createGcpResources() {
   const available = await gcp.compute.getRegions({});
   const regionNames = available.names;

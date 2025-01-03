@@ -1,7 +1,8 @@
 import * as gcp from "@pulumi/gcp";
 import * as azure from "@pulumi/azure-native";
 import * as aws from "@pulumi/aws";
-import * as agcl from './azure-geo-code-list';
+import * as azgcl from './azure-geo-code-list';
+import * as awsgcl from './aws-geo-code-list';
 
 // GCP creates a new DNS zone and record set for each GCP computing region.
 // It cannot discern by states or other boundaries.
@@ -41,7 +42,7 @@ async function createGcpResources() {
 // excluding the endpoints with subregions.
 async function createAzureResources() {
   // Create a new Azure Traffic Manager Profile for each GEO
-  const continentRegions = agcl.default.properties.geographicHierarchy.regions;
+  const continentRegions = azgcl.default.properties.geographicHierarchy.regions;
 
   // Create an Azure Traffic Manager Profile for continent detection
   const continentEndpoints = continentRegions.map((continentRegion) => {
@@ -76,7 +77,7 @@ async function createAzureResources() {
 
   // Create an Azure Traffic Manager Profile for each continent GEO.
   // There may be regions that have subregions. For those, don't include the region itself but the subregions.
-  agcl.default.properties.geographicHierarchy.regions.forEach((continentRegion) => {
+  azgcl.default.properties.geographicHierarchy.regions.forEach((continentRegion) => {
     const continentCode = continentRegion.code;
     type Region = {
       readonly code: string;
@@ -86,12 +87,12 @@ async function createAzureResources() {
     // flatMap the region, subregions.
     const countryOrStateProvinceRegions = continentRegion.regions.flatMap<Region, Region>(
       (countryOrStateRegion) => {
-      if (countryOrStateRegion.regions.length > 0) {
-        return countryOrStateRegion.regions;
-      } else {
-        return [countryOrStateRegion];
-      }
-    });
+        if (countryOrStateRegion.regions.length > 0) {
+          return countryOrStateRegion.regions;
+        } else {
+          return [countryOrStateRegion];
+        }
+      });
 
     const continentRegionTestEndpoints = countryOrStateProvinceRegions.map((countyOrStateProvinceRegion) => {
       return {
@@ -136,8 +137,48 @@ async function createAzureResources() {
   });
 }
 
-// AWS resources
+// Similar limitations to Azure, AWS can only have 100 endpoints per zone.
 async function createAwsResources() {
+  const hostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
+    name: "aws.geoip-test.mindflakes.com",
+  });
+  new aws.route53.Record(`geo-ip-test-fallback`, {
+    zoneId: hostedZone.zoneId,
+    name: `test-result-default`,
+    type: "CNAME",
+    ttl: 60,
+    records: [
+      `test-result-error.aws.geoip-test.mindflakes.com`,
+    ],
+    geolocationRoutingPolicies: [{
+      continent: "*",
+      country: "*",
+    }],
+    setIdentifier: "fallback",
+  });
+
+  // // Get the list of unique country names
+  awsgcl.default.GeoLocationDetailsList
+    .filter((geoLocation, index, self) =>
+      geoLocation.CountryCode &&
+      self.findIndex(g => g.CountryCode === geoLocation.CountryCode) === index
+  ).filter((geoLocation) => {
+    return geoLocation.CountryCode != undefined;
+  }).forEach((geoLocation) => {
+      new aws.route53.Record(`geo-ip-test-${geoLocation.CountryCode.toLowerCase()}`, {
+        zoneId: hostedZone.zoneId,
+        name: `test-result-${geoLocation.CountryCode.toLowerCase()}`,
+        type: "CNAME",
+        ttl: 60,
+        records: [
+          `test-result-${geoLocation.CountryCode.toLowerCase()}.example.com`,
+        ],
+        geolocationRoutingPolicies: [{
+          country: geoLocation.CountryCode,
+        }],
+        setIdentifier: geoLocation.CountryName,
+      });
+    });
 
 }
 
@@ -145,5 +186,6 @@ export = async () => {
   await Promise.all([
     createGcpResources(),
     createAzureResources(),
+    createAwsResources(),
   ]);
 }

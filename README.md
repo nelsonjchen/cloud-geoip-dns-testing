@@ -173,4 +173,4 @@ As you can see, the CNAME record points to `test-result-`**`us-ca`**`.azure.geoi
 
 # Development
 
-This is just a simple Pulumi project that sets up the DNS records for the GeoIP routing test. You can run `pulumi up` to deploy the infrastructure to your own cloud account. You'll need to have Pulumi installed and configured with your cloud provider's credentials.
+This is just a simple Pulumi project that sets up the DNS records for the GeoIP routing test. You can run `pulumi up` to deploy the infrastructure to your own cloud account. You'll need to have Pulumi installed and configured with your cloud provider's credentials. The estimated cost to run this is about $0.25/month as Google charges per zone. The rest and Google charge by query which we will have little or value-addons such as monitoring which we don't need for this simple test.

@@ -1,7 +1,5 @@
-import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as azure from "@pulumi/azure-native";
-import { EndpointType } from "@pulumi/azure-native/network";
 import * as agcl from './azure-geo-code-list';
 
 // GCP creates a new DNS zone and record set for each GCP computing region.
@@ -135,6 +133,11 @@ async function createAzureResources() {
       ],
     });
   });
+}
+
+// AWS resources
+async function createAwsResources() {
+
 }
 
 export = async () => {

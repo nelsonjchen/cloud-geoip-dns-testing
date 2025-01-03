@@ -88,7 +88,7 @@ async function createAzureResources() {
     const countryOrStateProvinceRegions = continentRegion.regions.flatMap<Region, Region>(
       (countryOrStateRegion) => {
         if (countryOrStateRegion.regions.length > 0) {
-          return countryOrStateRegion.regions;
+          return [countryOrStateRegion as Region, ...countryOrStateRegion.regions];
         } else {
           return [countryOrStateRegion];
         }
@@ -122,6 +122,7 @@ async function createAzureResources() {
       },
       endpoints: [
         ...continentRegionTestEndpoints,
+        // Fallback for unknown regions
         {
           type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
           name: 'ERROR',

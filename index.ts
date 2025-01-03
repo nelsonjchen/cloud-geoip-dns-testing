@@ -139,10 +139,14 @@ async function createAzureResources() {
 
 // Similar limitations to Azure, AWS can only have 100 endpoints per zone.
 async function createAwsResources() {
+  const delegatedSet = new aws.route53.DelegationSet("geoip-test", {
+    referenceName: "geoip-test",
+  });
 
   // Create an upper zone with the continent Location data. These are identified by having a
   const rootHostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
     name: "aws.geoip-test.mindflakes.com",
+    delegationSetId: delegatedSet.id
   });
 
   // Create a record set for each continent
@@ -158,7 +162,7 @@ async function createAwsResources() {
       type: "CNAME",
       ttl: 60,
       records: [
-        `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+        `test.${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
       ],
       geolocationRoutingPolicies: [{
         continent: geoLocation.ContinentCode,
@@ -167,8 +171,8 @@ async function createAwsResources() {
     })
   );
 
-  const continentZones = continentGeoLocations.map((geoLocation) => {
-    const zone = new aws.route53.Zone(`${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`, {
+  continentGeoLocations.forEach((geoLocation) => {
+    const continentZone = new aws.route53.Zone(`${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`, {
       name: `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
     });
     new aws.route53.Record(`${geoLocation.ContinentName}-ns`, {
@@ -176,8 +180,49 @@ async function createAwsResources() {
       name: `${geoLocation.ContinentCode.toLowerCase()}-geoip-test`,
       type: "NS",
       ttl: 60,
-      records: zone.nameServers.apply((nameServers) => nameServers),
+      records: continentZone.nameServers.apply((nameServers) => nameServers),
     });
+    // Inside of each continent zone, make a record for each country or state
+    const countryOrStateProvinceGeoLocations = awsgcl.default.GeoLocationDetailsList.filter(
+      (countryOrStateProvinceGeoLocation) => countryOrStateProvinceGeoLocation.ContinentCode === geoLocation.ContinentCode
+    ).filter(
+      (geoLocation) => geoLocation.CountryName !== undefined && geoLocation.CountryCode !== undefined
+    )
+    const countryOrStateProvinceRecords = countryOrStateProvinceGeoLocations.map(
+      (countryOrStateProvinceGeoLocation) => {
+        let name = countryOrStateProvinceGeoLocation.CountryName;
+        let code = countryOrStateProvinceGeoLocation.CountryCode;
+        if (countryOrStateProvinceGeoLocation.SubdivisionName !== undefined && countryOrStateProvinceGeoLocation.SubdivisionCode !== undefined) {
+          name = `${countryOrStateProvinceGeoLocation.CountryName}-${countryOrStateProvinceGeoLocation.SubdivisionName}`;
+          code = `${countryOrStateProvinceGeoLocation.CountryCode}-${countryOrStateProvinceGeoLocation.SubdivisionCode}`;
+        }
+        let routingPolicy: {
+          country: string;
+          subdivision?: string;
+        };
+        if (countryOrStateProvinceGeoLocation.SubdivisionName !== undefined && countryOrStateProvinceGeoLocation.SubdivisionCode !== undefined) {
+          routingPolicy = {
+            country: countryOrStateProvinceGeoLocation.CountryCode,
+            subdivision: countryOrStateProvinceGeoLocation.SubdivisionCode,
+          };
+        } else {
+          routingPolicy = {
+            country: countryOrStateProvinceGeoLocation.CountryCode,
+          };
+        }
+        new aws.route53.Record(`geo-ip-test-${name}`, {
+          zoneId: continentZone.zoneId,
+          name: `test.${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+          type: "CNAME",
+          ttl: 60,
+          records: [
+            `test-result-${code.toLowerCase()}.aws.geoip-test.mindflakes.com`,
+          ],
+          geolocationRoutingPolicies: [routingPolicy],
+          setIdentifier: code,
+        })
+      }
+    );
     return
   });
 

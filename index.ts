@@ -142,20 +142,7 @@ async function createAwsResources() {
   const hostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
     name: "aws.geoip-test.mindflakes.com",
   });
-  new aws.route53.Record(`geo-ip-test-fallback`, {
-    zoneId: hostedZone.zoneId,
-    name: `test-result-default`,
-    type: "CNAME",
-    ttl: 60,
-    records: [
-      `test-result-error.aws.geoip-test.mindflakes.com`,
-    ],
-    geolocationRoutingPolicies: [{
-      continent: "*",
-      country: "*",
-    }],
-    setIdentifier: "fallback",
-  });
+
 
   // // Get the list of unique country names
   awsgcl.default.GeoLocationDetailsList
@@ -164,10 +151,12 @@ async function createAwsResources() {
       self.findIndex(g => g.CountryCode === geoLocation.CountryCode) === index
   ).filter((geoLocation) => {
     return geoLocation.CountryCode != undefined;
+  }).filter((geoLocation) => {
+    return geoLocation.CountryCode != "*";
   }).forEach((geoLocation) => {
       new aws.route53.Record(`geo-ip-test-${geoLocation.CountryCode.toLowerCase()}`, {
         zoneId: hostedZone.zoneId,
-        name: `test-result-${geoLocation.CountryCode.toLowerCase()}`,
+        name: `test`,
         type: "CNAME",
         ttl: 60,
         records: [

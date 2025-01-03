@@ -26,6 +26,8 @@ The rest of this README explains how to use the infrastructure set up to test DN
     - [Linux/macOS](#linuxmacos-1)
     - [Windows](#windows-1)
   - [Understanding the Output](#understanding-the-output)
+  - [Tips for Testing](#tips-for-testing)
+    - [Test against Different DNS Servers](#test-against-different-dns-servers)
   - [Pitfalls](#pitfalls)
   - [Development](#development)
   - [Useful Tools](#useful-tools)
@@ -279,6 +281,22 @@ crazysim@instance-20250103-215639:~$
 ```
 
 If you encounter this, ensure you’re testing from within the intended continent. It might also be an actual bug in the DNS GeoIP routing system.
+
+## Tips for Testing
+
+### Test against Different DNS Servers
+
+You can test against different DNS servers with `dig` or `Resolve-DnsName` from the system configuration. This can help you see how different DNS servers resolve the same domain.
+
+For example, to test against Google’s public DNS servers on Linux/macOS or Windows:
+
+```bash
+dig @8.8.8.8 CNAME test.gcp.geoip-test.mindflakes.com
+```
+
+```powershell
+Resolve-DnsName -Name test.gcp.geoip-test.mindflakes.com -Type CNAME -Server 8.8.8.8
+```
 
 ## Pitfalls
 

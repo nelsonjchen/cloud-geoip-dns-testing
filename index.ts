@@ -151,20 +151,20 @@ async function createAwsResources() {
   );
 
   const continentRecords = continentGeoLocations.map((geoLocation) =>
-      new aws.route53.Record(`geo-ip-test-${geoLocation.ContinentCode.toLowerCase()}`, {
-        zoneId: rootHostedZone.zoneId,
-        name: `test`,
-        type: "CNAME",
-        ttl: 60,
-        records: [
-          `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
-        ],
-        geolocationRoutingPolicies: [{
-          continent: geoLocation.ContinentCode,
-        }],
-        setIdentifier: geoLocation.ContinentName,
-      })
-    );
+    new aws.route53.Record(`geo-ip-test-${geoLocation.ContinentCode.toLowerCase()}`, {
+      zoneId: rootHostedZone.zoneId,
+      name: `test`,
+      type: "CNAME",
+      ttl: 60,
+      records: [
+        `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+      ],
+      geolocationRoutingPolicies: [{
+        continent: geoLocation.ContinentCode,
+      }],
+      setIdentifier: geoLocation.ContinentName,
+    })
+  );
 
 }
 

@@ -317,7 +317,7 @@ I don’t expect most people to run this themselves, but I’m providing the cod
 
 ## Trivia and Observations
 
-* Azure has a proper geographical heirarchy for GeoIP routing, with continent, region, and country options. It even has provinces for Canada, Australia, and States for the US.
+* Azure has a proper geographical heirarchy for GeoIP routing, with continent, region, and country options. It even has provinces for Canada, Australia, and states for the US.
 * AWS is relatively flat and only has subregions for the US states and **Ukraine**'s oblasts. Continental division for the source data had to be enriched from AI. There are no subregions for Canada or Australia. I’m not sure why Ukraine is singled out but it might due to the conflict with Russia and the need for granularity.
 
 ## Useful Tools

@@ -18,7 +18,7 @@ async function createGcpResources() {
   // We want to test with CNAME records, so we need to create a CNAME record for
   // each region
   // Just set examples
-  const recordSet = new gcp.dns.RecordSet("test", {
+  const recordSet = new gcp.dns.RecordSet("geoip-test", {
     managedZone: dnsZone.name,
     name: "test.gcp.geoip-test.mindflakes.com.",
     type: "CNAME",
@@ -36,7 +36,7 @@ async function createGcpResources() {
 
 async function createAzureResources() {
   // Create an Azure Traffic Manager Profile
-  const profile = new azure.network.Profile("test", {
+  const profile = new azure.network.Profile("geoip-test", {
     resourceGroupName: "geoip-test",
     location: "global",
     trafficRoutingMethod: "Geographic",

@@ -1693,6 +1693,17 @@ const data = {
   }
 }
 
+function getAllCodes(node = data.properties.geographicHierarchy) {
+  const codes = [node.code];
+  if (node.regions && node.regions.length > 0) {
+    for (const region of node.regions) {
+      codes.push(...getAllCodes(region));
+    }
+  }
+  return codes;
+}
+
 export default {
-  data
+  data,
+  getAllCodes
 };

@@ -139,35 +139,32 @@ async function createAzureResources() {
 
 // Similar limitations to Azure, AWS can only have 100 endpoints per zone.
 async function createAwsResources() {
-  const hostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
+  // Create an upper zone with the continent Location data. These are identified by having a
+  const rootHostedZone = new aws.route53.Zone("aws.geoip-test.mindflakes.com", {
     name: "aws.geoip-test.mindflakes.com",
   });
 
+  // Create a record set for each continent
+  // Continents are identified by having a ContinentName
+  const continentGeoLocations = awsgcl.default.GeoLocationDetailsList.filter(
+    (geoLocation) => geoLocation.ContinentName !== undefined
+  );
 
-  // // Get the list of unique country names
-  awsgcl.default.GeoLocationDetailsList
-    .filter((geoLocation, index, self) =>
-      geoLocation.CountryCode &&
-      self.findIndex(g => g.CountryCode === geoLocation.CountryCode) === index
-  ).filter((geoLocation) => {
-    return geoLocation.CountryCode != undefined;
-  }).filter((geoLocation) => {
-    return geoLocation.CountryCode != "*";
-  }).forEach((geoLocation) => {
-      new aws.route53.Record(`geo-ip-test-${geoLocation.CountryCode.toLowerCase()}`, {
-        zoneId: hostedZone.zoneId,
+  const continentRecords = continentGeoLocations.map((geoLocation) =>
+      new aws.route53.Record(`geo-ip-test-${geoLocation.ContinentCode.toLowerCase()}`, {
+        zoneId: rootHostedZone.zoneId,
         name: `test`,
         type: "CNAME",
         ttl: 60,
         records: [
-          `test-result-${geoLocation.CountryCode.toLowerCase()}.example.com`,
+          `${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
         ],
         geolocationRoutingPolicies: [{
-          country: geoLocation.CountryCode,
+          continent: geoLocation.ContinentCode,
         }],
-        setIdentifier: geoLocation.CountryName,
-      });
-    });
+        setIdentifier: geoLocation.ContinentName,
+      })
+    );
 
 }
 

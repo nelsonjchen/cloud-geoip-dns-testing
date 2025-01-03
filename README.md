@@ -2,7 +2,7 @@
 
 *Hey DNS, where do you think I am?*
 
-Make sure that your ISP's DNS server or third party DNS server is resolving with the correct results from popular cloud providers via Geolocation via DNS. While this tool is not a comprehensive test of what GeoIP solutions an online service may use and they may use many other methods, it does tell you if GeoIP routing via DNS is working for you which can be a big hint to any latency or regional issues you may be experiencing.
+Make sure that your ISP's DNS server or third party DNS server is resolving with the correct results from popular cloud providers via Geolocation via DNS. While this tool is not a comprehensive test of what GeoIP solutions an online service may use and they may very well use many other methods, it does tell you if GeoIP routing via DNS is working for you which can be a big hint to any latency or regional issues you may be experiencing.
 
 This tool is made of:
 

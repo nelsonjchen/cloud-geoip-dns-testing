@@ -30,6 +30,7 @@ The rest of this README explains how to use the infrastructure set up to test DN
     - [Test against Different DNS Servers](#test-against-different-dns-servers)
   - [Pitfalls](#pitfalls)
   - [Development](#development)
+  - [Trivia and Observations](#trivia-and-observations)
   - [Useful Tools](#useful-tools)
 
 ## Prerequisites
@@ -313,6 +314,11 @@ Resolve-DnsName -Name test.gcp.geoip-test.mindflakes.com -Type CNAME -Server 8.8
 This is a simple Pulumi project that sets up DNS records for GeoIP routing tests. You can run `pulumi up` to deploy the infrastructure to your own cloud account. You’ll need Pulumi installed and configured with multiple cloud providers’ credentials. The estimated cost to run this is about $0.25/month, since Google charges per zone. Other providers charge by query, which should be minimal. We don’t need extra features like monitoring for this test.
 
 I don’t expect most people to run this themselves, but I’m providing the code for transparency. Feel free to fork or reference it if needed.
+
+## Trivia and Observations
+
+* Azure has a proper geographical heirarchy for GeoIP routing, with continent, region, and country options. It even has provinces for Canada, Australia, and States for the US.
+* AWS is relatively flat and only has subregions for the US states and **Ukraine**'s oblasts. Continental division for the source data had to be enriched from AI. There are no subregions for Canada or Australia. I’m not sure why Ukraine is singled out but it might due to the conflict with Russia and the need for granularity.
 
 ## Useful Tools
 

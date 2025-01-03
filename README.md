@@ -8,7 +8,7 @@ While this tool isn’t comprehensive—services can use many other geolocation 
 
 This tool is made up of:
 
-* Cloud configuration via Pulumi to configure popular cloud providers to use GeoIP routing in their DNS offerings for you to test against. (This part is mainly for transparency, showing how DNS records are set up.) I've already set up the infrastructure for you which you can test against.
+* Cloud configuration via Pulumi to configure popular cloud providers to use GeoIP routing in their DNS offerings for you to test against. This part is mainly for transparency, showing how DNS records are set up. I've already set up the infrastructure for you which you can test against.
 * A simple guide on how to use the `dig` or PowerShell cmdlet to query a CNAME record with geo-routing. This part is for you.
 
 The rest of this README explains how to use the infrastructure set up to test DNS-based GeoIP routing.

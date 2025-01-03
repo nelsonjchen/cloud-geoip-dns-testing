@@ -208,7 +208,7 @@ er.net
 PS C:\Users\Nelson>
 ```
 
-As you can see, it resolves to `test-result-us-ca.azure.geoip-test.mindflakes.com`, suggesting GeoIP thinks you’re near `us-ca` (California). You can find region code mappings in the `./azure-geo-code-list.ts` file.
+As you can see, it resolves to `test-result-us-ca.azure.geoip-test.mindflakes.com`, suggesting GeoIP thinks you’re near `us-ca` (California). You can find region code mappings in the [./azure-geo-code-list.ts](./azure-geo-code-list.ts) file.
 
 Now, an AWS example:
 
@@ -251,7 +251,7 @@ est.mindflakes.com
 PS C:\Users\Nelson>
 ```
 
-Here it points to `test-result-us-ca.aws.geoip-test.mindflakes.com`, indicating you’re near the `us-ca` region in AWS. If needed, refer to the `./aws-geo-code-list.ts` file for code mappings.
+Here it points to `test-result-us-ca.aws.geoip-test.mindflakes.com`, indicating you’re near the `us-ca` region in AWS. If needed, refer to the [./aws-geo-code-list.ts](./aws-geo-code-list.ts) file for code mappings.
 
 Sometimes you’ll see a CNAME that indicates a GeoIP error or fallback. Below is a sample from a GCP Paris VM testing the AWS North America domain:
 

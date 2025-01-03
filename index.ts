@@ -163,7 +163,7 @@ async function createAwsResources() {
       type: "CNAME",
       ttl: 60,
       records: [
-        `test.${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+        `test-result-${geoLocation.ContinentCode.toLowerCase()}.aws.geoip-test.mindflakes.com`,
       ],
       geolocationRoutingPolicies: [{
         continent: geoLocation.ContinentCode,
@@ -172,10 +172,6 @@ async function createAwsResources() {
     })
   );
   // Add a default record for unknown locations
-  // {
-  //   "CountryCode": "*",
-  //     "CountryName": "Default"
-  // }
   new aws.route53.Record(`geo-ip-test-default`, {
     zoneId: rootHostedZone.zoneId,
     name: `test`,

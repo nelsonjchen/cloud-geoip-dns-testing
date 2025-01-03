@@ -1,5 +1,6 @@
 import * as gcp from "@pulumi/gcp";
 import * as azure from "@pulumi/azure-native";
+import * as aws from "@pulumi/aws";
 import * as agcl from './azure-geo-code-list';
 
 // GCP creates a new DNS zone and record set for each GCP computing region.

@@ -2,10 +2,11 @@
     "name": "geoip-testing-pulumi",
     "main": "index.ts",
     "devDependencies": {
-        "@types/node": "^22.19.69",
+        "@types/node": "^22.0.0",
         "typescript": "^5.0.0"
     },
     "dependencies": {
+        "@pulumi/aws": "^6.66.2",
         "@pulumi/azure-native": "^2.80.0",
         "@pulumi/gcp": "^8.12.1",
         "@pulumi/pulumi": "^3.113.0"

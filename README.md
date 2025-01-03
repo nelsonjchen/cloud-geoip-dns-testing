@@ -69,19 +69,19 @@ Here are the domains to test and caveats for each:
     * Does AWS know what continent you are in? This generally works, but if you get an error from the continent-specific domains, use this to determine the "correct" continent.
     * `test.aws.geoip-test.mindflakes.com`
   * Africa
-    * `af-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.af-geoip-test.aws.geoip-test.mindflakes.com`
   * Antarctica (Hi! 🐧)
-    * `an-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.an-geoip-test.aws.geoip-test.mindflakes.com`
   * Asia
-    * `as-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.as-geoip-test.aws.geoip-test.mindflakes.com`
   * Europe
-    * `eu-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.eu-geoip-test.aws.geoip-test.mindflakes.com`
   * Oceania
-    * `oc-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.oc-geoip-test.aws.geoip-test.mindflakes.com`
   * North America
-    * `na-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.na-geoip-test.aws.geoip-test.mindflakes.com`
   * South America
-    * `sa-geoip-test.aws.geoip-test.mindflakes.com`
+    * `test.sa-geoip-test.aws.geoip-test.mindflakes.com`
 
 ### Query the CNAME Record
 
@@ -197,4 +197,16 @@ Anyway, I don't believe this to be of use for most people to run on their own. I
 
 # Useful Tools
 
-* https://www.whatsmydns.net/ - A website that can show you DNS records from around the world. Useful for checking if your DNS records are propagating correctly.
+* https://www.whatsmydns.net/ - A website that can show you DNS records from around the world. The system isn't perfect but this is a good way to see if this is roughly working.
+  * Google
+    * https://www.whatsmydns.net/#CNAME/test.gcp.geoip-test.mindflakes.com
+  * Azure
+    * World
+      * https://www.whatsmydns.net/#CNAME/world-geoip-test.trafficmanager.net
+    * North America
+      * https://www.whatsmydns.net/#CNAME/geo-na-geoip-test.trafficmanager.net
+  * AWS
+    * World
+      * https://www.whatsmydns.net/#CNAME/test.aws.geoip-test.mindflakes.com
+    * North America
+      * https://www.whatsmydns.net/#CNAME/test.na-geoip-test.aws.geoip-test.mindflakes.com

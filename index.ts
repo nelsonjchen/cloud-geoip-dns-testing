@@ -20,7 +20,7 @@ async function createGcpResources() {
   // We want to test with CNAME records, so we need to create a CNAME record for
   // each region
   // Just set examples
-  const recordSet = new gcp.dns.RecordSet("geoip-test", {
+  new gcp.dns.RecordSet("geoip-test", {
     managedZone: dnsZone.name,
     name: "test.gcp.geoip-test.mindflakes.com.",
     type: "CNAME",

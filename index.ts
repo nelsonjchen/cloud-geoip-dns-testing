@@ -154,6 +154,9 @@ async function createAwsResources() {
   // Continents are identified by having a ContinentName
   const continentGeoLocations = awsgcl.default.GeoLocationDetailsList.filter(
     (geoLocation) => geoLocation.ContinentName !== undefined
+  ).filter(
+    // Skip Antarctica
+    (geoLocation) => geoLocation.ContinentName !== "Antarctica"
   );
 
   const continentRecords = continentGeoLocations.map((geoLocation) =>

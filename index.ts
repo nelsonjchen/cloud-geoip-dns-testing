@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import * as azure from "@pulumi/azure-native";
 
 // GCP creates a new DNS zone and record set for each GCP computing region.
 // It cannot discern by states or other boundaries.
@@ -33,6 +34,27 @@ async function createGcpResources() {
   });
 }
 
+async function createAzureResources() {
+  // Create an Azure Traffic Manager Profile
+  const profile = new azure.network.Profile("test", {
+    resourceGroupName: "geoip-test",
+    location: "global",
+    trafficRoutingMethod: "Geographic",
+    dnsConfig: {
+      relativeName: 'geoip-test',
+    },
+    // Unused but needed for bringup
+    monitorConfig: {
+      protocol: "http",
+      port: 80,
+      path: "/"
+    }
+  });
+}
+
 export = async () => {
-  await createGcpResources();
+  await Promise.all([
+    createGcpResources(),
+    createAzureResources(),
+  ]);
 }

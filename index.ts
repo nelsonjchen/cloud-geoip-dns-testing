@@ -42,20 +42,19 @@ async function createGcpResources() {
 // excluding the endpoints with subregions.
 async function createAzureResources() {
   // Create a new Azure Traffic Manager Profile for each GEO
-  const continentCodes = agcl.default.properties.geographicHierarchy.regions.map((region) => {
-    return region.code;
-  });
+  const continentRegions = agcl.default.properties.geographicHierarchy.regions;
 
   // Create an Azure Traffic Manager Profile for continent detection
-  const continentEndpoints = continentCodes.map((code) => {
+  const continentEndpoints = continentRegions.map((continentRegion) => {
     return {
       type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-      name: code,
+      // I guess it can't have slashes
+      name: continentRegion.name.replace(/\//g, '-'),
       alwaysServe: azure.network.AlwaysServe.Enabled,
-      target: `test-result-${code.toLowerCase()}.azure.geoip-test.mindflakes.com`,
+      target: `test-result-${continentRegion.code.toLowerCase()}.azure.geoip-test.mindflakes.com`,
       endpointStatus: azure.network.EndpointStatus.Enabled,
       geoMapping: [
-        code,
+        continentRegion.code,
       ]
     };
   });
@@ -80,26 +79,30 @@ async function createAzureResources() {
   // There may be regions that have subregions. For those, don't include the region itself but the subregions.
   agcl.default.properties.geographicHierarchy.regions.forEach((continentRegion) => {
     const continentCode = continentRegion.code;
+    type Region = {
+      readonly code: string;
+      readonly name: string;
+      readonly regions: readonly Region[];
+    }
     // flatMap the region, subregions.
-    const countryOrStateProvinceCodes = continentRegion.regions.flatMap((countryRegion) => {
-      if (countryRegion.regions.length > 0) {
-        return countryRegion.regions.map((stateProvinceRegion) => {
-          return stateProvinceRegion.code;
-        });
+    const countryOrStateProvinceRegions = continentRegion.regions.flatMap<Region, Region>(
+      (countryOrStateRegion) => {
+      if (countryOrStateRegion.regions.length > 0) {
+        return countryOrStateRegion.regions;
       } else {
-        return [countryRegion.code];
+        return [countryOrStateRegion];
       }
     });
 
-    const continentRegionTestEndpoints = countryOrStateProvinceCodes.map((regionCode) => {
+    const continentRegionTestEndpoints = countryOrStateProvinceRegions.map((countyOrStateProvinceRegion) => {
       return {
         type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-        name: regionCode,
+        name: countyOrStateProvinceRegion.name,
         alwaysServe: azure.network.AlwaysServe.Enabled,
-        target: `test-result-${regionCode.toLowerCase()}.azure.geoip-test.mindflakes.com`,
+        target: `test-result-${countyOrStateProvinceRegion.code.toLowerCase()}.azure.geoip-test.mindflakes.com`,
         endpointStatus: azure.network.EndpointStatus.Enabled,
         geoMapping: [
-          regionCode,
+          countyOrStateProvinceRegion.code,
         ]
       };
     });
@@ -121,7 +124,7 @@ async function createAzureResources() {
         ...continentRegionTestEndpoints,
         {
           type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-          name: 'WORLD',
+          name: 'ERROR',
           alwaysServe: azure.network.AlwaysServe.Enabled,
           target: `test-result-error-unknown-wrong-continent-maybe.azure.geoip-test.mindflakes.com`,
           endpointStatus: azure.network.EndpointStatus.Enabled,

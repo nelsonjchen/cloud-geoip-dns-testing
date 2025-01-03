@@ -123,7 +123,7 @@ async function createAzureResources() {
           type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
           name: 'WORLD',
           alwaysServe: azure.network.AlwaysServe.Enabled,
-          target: `test-result-unknown-wrong-continent-maybe.azure.geoip-test.mindflakes.com`,
+          target: `test-result-error-unknown-wrong-continent-maybe.azure.geoip-test.mindflakes.com`,
           endpointStatus: azure.network.EndpointStatus.Enabled,
           geoMapping: [
             'WORLD',

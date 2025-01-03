@@ -2,7 +2,7 @@
     "name": "geoip-testing-pulumi",
     "main": "index.ts",
     "devDependencies": {
-        "@types/node": "^18",
+        "@types/node": "^22.19.69",
         "typescript": "^5.0.0"
     },
     "dependencies": {

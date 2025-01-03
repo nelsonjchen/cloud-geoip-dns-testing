@@ -164,7 +164,7 @@ PS C:\Users\Nelson>
 
 ## Understanding the Output
 
-The output shows the CNAME record that was resolved. This record points to a domain associated with the region the DNS GeoIP system believes you’re closest to. In the example above, the record points to `test-result-us-west2.gcp.geoip-test.mindflakes.com`, indicating GeoIP sees you as near the `us-west2` region in Google Cloud Platform.
+The output shows the CNAME record that was resolved. This record points to a domain associated with the region the DNS GeoIP system believes you’re closest to. In the example above, the record points to `test-result-us-west2.gcp.geoip-test.mindflakes.com`, indicating GeoIP sees you as near the `us-west2` region in Google Cloud Platform. Google Cloud regions can be found [on their site along with the "machine" name for the region](https://cloud.google.com/about/locations).
 
 Below is an Azure example. Azure’s GeoIP can be more fine-grained than GCP’s:
 

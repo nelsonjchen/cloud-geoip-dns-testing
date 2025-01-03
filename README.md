@@ -39,7 +39,9 @@ The "tool" works by querying a domain name that differs in responses based on wh
 
 ### Pick a Domain
 
-First, pick domain(s) to query CNAMEs from. You'll need to pick domain(s) based on the cloud provider you want to test against. I suggest testing with against all the major cloud providers. For Azure and AWS, you should also make sure to test against the continent-determining domain to see if they can determine what continent you are in and then test against the continent-specific domains to see if they can determine closer to where you are.
+First, pick domain(s) to query CNAMEs from. You'll need to pick domain(s) based on the cloud provider you want to test against. I suggest testing with against all the major cloud providers.
+
+For Azure and AWS, you should also make sure to test against the continent-determining domain first to see if they can determine what continent you are in and then you should test against the continent-specific domains to see if they can determine closer to where you are.
 
 Here are the domains to test and caveats for each:
 
@@ -266,6 +268,12 @@ crazysim@instance-20250103-215639:~$
 ```
 
 In these cases, please make sure you are testing from a location that is in the continent you are testing against. It could also indicate a real bug in the DNS GeoIP routing system as well.
+
+# Pitfalls
+
+* **DNS Caching**: DNS records are cached by your ISP, your local network, and your computer. If you get unexpected results, try flushing your DNS cache or waiting a few minutes.
+* **VPN**: If you are using a VPN, the DNS GeoIP system will think you are in the location of the VPN server. This can be useful for testing, but it can also give you incorrect results.
+* **It's not perfect.**: DNS-based GeoIP routing is just one of many methods that services use to determine your location. It's not always accurate, and it can be affected by many factors. As an example, IPv4 address blocks are frequently reassigned to different regions and owners, and DNS-based GeoIP routing can be slow to update.
 
 # Development
 

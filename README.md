@@ -40,30 +40,48 @@ First, pick a domain to query CNAMEs from. You'll need to pick a domain based on
 Here are the domains to test and caveats for each:
 
 * Google Cloud Platform (GCP)
+  * **Note**: Google Cloud Platform is low on the granularity of DNS GeoIP compared to Azure and AWS. They seem to only have a few regions that they route by and are tied to their datacenter locations.
   * `test.gcp.geoip-test.mindflakes.com`
 * Azure
   * **Note**: Azure has extremely fine-grained DNS GeoIP compared to GCP. Unfortunately, I could not roll all options into one domain to test as there is a maximum of 200 routing options per "traffic manager profile". For your Azure test, you'll need to know the correct domain name for the continent you are testing from.
   * Continent
     * Does Azure know what continent you are in? This generally works, but if you get an error from the continent-specific domains, use this to determine the "correct" continent.
     * `world-geoip-test.trafficmanager.net`
-  * North America
-    * `geo-na-geoip-test.trafficmanager.net`
-  * Europe
-    * `geo-eu-geoip-test.trafficmanager.net`
-  * Middle East
-    * `geo-me-geoip-test.trafficmanager.net`
   * Africa
     * `geo-af-geoip-test.trafficmanager.net`
+  * Antarctica (Hi! 🐧)
+    * `geo-an-geoip-test.trafficmanager.net`
   * Asia
     * `geo-as-geoip-test.trafficmanager.net`
   * Asia Pacific
     * `geo-ap-geoip-test.trafficmanager.net`
+  * Europe
+    * `geo-eu-geoip-test.trafficmanager.net`
+  * Middle East
+    * `geo-me-geoip-test.trafficmanager.net`
+  * North America
+    * `geo-na-geoip-test.trafficmanager.net`
   * South America
     * `geo-sa-geoip-test.trafficmanager.net`
-  * Antarctica (Hi! 🐧)
-    * `geo-an-geoip-test.trafficmanager.net`
 * Amazon Web Services (AWS)
-  * TODO
+  * **Note**: AWS also has extremely fine-grained DNS GeoIP compared to GCP. Unfortunately, I could not roll all options into one domain to test as there is a maximum of 100 routing options per Hosted Zone. For your AWS test, you'll need to know the correct domain name for the continent you are testing from.
+  * Continent
+    * Does AWS know what continent you are in? This generally works, but if you get an error from the continent-specific domains, use this to determine the "correct" continent.
+    * `test.aws.geoip-test.mindflakes.com`
+  * Africa
+    * `af-geoip-test.aws.geoip-test.mindflakes.com`
+  * Antarctica (Hi! 🐧)
+    * `an-geoip-test.aws.geoip-test.mindflakes.com`
+  * Asia
+    * `as-geoip-test.aws.geoip-test.mindflakes.com`
+  * Europe
+    * `eu-geoip-test.aws.geoip-test.mindflakes.com`
+  * Oceania
+    * `oc-geoip-test.aws.geoip-test.mindflakes.com`
+  * North America
+    * `na-geoip-test.aws.geoip-test.mindflakes.com`
+  * South America
+    * `sa-geoip-test.aws.geoip-test.mindflakes.com`
 
 ### Query the CNAME Record
 

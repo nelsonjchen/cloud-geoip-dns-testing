@@ -1,8 +1,4 @@
-// From https://learn.microsoft.com/en-us/rest/api/trafficmanager/geographic-hierarchies/get-default?view=rest-trafficmanager-2022-04-01&tabs=HTTP&tryIt=true&source=docs#code-try-0
-
-// Countries may change but not enough to warrant pulling a whole client.
-
-const data = {
+{
   "id": "/providers/Microsoft.Network/trafficManagerGeographicHierarchies/default",
   "name": "default",
   "type": "Microsoft.Network/trafficManagerGeographicHierarchies",
@@ -1692,18 +1688,3 @@ const data = {
     }
   }
 }
-
-function getAllCodes(node = data.properties.geographicHierarchy) {
-  const codes = [node.code];
-  if (node.regions && node.regions.length > 0) {
-    for (const region of node.regions) {
-      codes.push(...getAllCodes(region));
-    }
-  }
-  return codes;
-}
-
-export default {
-  data,
-  getAllCodes
-};

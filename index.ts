@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as azure from "@pulumi/azure-native";
 import { EndpointType } from "@pulumi/azure-native/network";
+import * as agcl from './azure-geo-code-list';
 
 // GCP creates a new DNS zone and record set for each GCP computing region.
 // It cannot discern by states or other boundaries.
@@ -36,6 +37,20 @@ async function createGcpResources() {
 }
 
 async function createAzureResources() {
+  // Construct endpoints for each valid code
+  const mappedEndpoints = agcl.default.map((code) => {
+    return {
+      type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+      name: code,
+      alwaysServe: azure.network.AlwaysServe.Enabled,
+      target: `test-result-${code}.azure.geoip-test.mindflakes.com`,
+      endpointStatus: azure.network.EndpointStatus.Enabled,
+      geoMapping: [
+        code,
+      ]
+    };
+  });
+
   // Create an Azure Traffic Manager Profile
   const profile = new azure.network.Profile("geoip-test", {
     resourceGroupName: "geoip-test",
@@ -50,18 +65,7 @@ async function createAzureResources() {
       port: 80,
       path: "/"
     },
-    endpoints: [
-      {
-        type: "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-        name: "california",
-        alwaysServe: azure.network.AlwaysServe.Enabled,
-        target: "california.geoip-test.mindflakes.com",
-        endpointStatus: azure.network.EndpointStatus.Enabled,
-        geoMapping: [
-          "US-CA",
-        ]
-      }
-    ]
+    endpoints: mappedEndpoints,
   });
 }
 

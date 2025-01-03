@@ -170,6 +170,24 @@ async function createAwsResources() {
       setIdentifier: geoLocation.ContinentName,
     })
   );
+  // Add a default record for unknown locations
+  // {
+  //   "CountryCode": "*",
+  //     "CountryName": "Default"
+  // }
+  new aws.route53.Record(`geo-ip-test-default`, {
+    zoneId: rootHostedZone.zoneId,
+    name: `test`,
+    type: "CNAME",
+    ttl: 60,
+    records: [
+      `test-result-error-unknown-wrong-continent-maybe.aws.geoip-test.mindflakes.com`,
+    ],
+    geolocationRoutingPolicies: [{
+      country: "*",
+    }],
+    setIdentifier: "Default",
+  });
 
   continentGeoLocations.forEach((geoLocation) => {
     const continentZone = new aws.route53.Zone(`${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`, {
@@ -221,8 +239,21 @@ async function createAwsResources() {
           geolocationRoutingPolicies: [routingPolicy],
           setIdentifier: code,
         })
-      }
-    );
+      });
+    // Add a default record for unknown locations
+    new aws.route53.Record(`geo-ip-test-${geoLocation.ContinentName}-default`, {
+      zoneId: continentZone.zoneId,
+      name: `test.${geoLocation.ContinentCode.toLowerCase()}-geoip-test.aws.geoip-test.mindflakes.com`,
+      type: "CNAME",
+      ttl: 60,
+      records: [
+        `test-result-error-unknown-wrong-continent-maybe.aws.geoip-test.mindflakes.com`,
+      ],
+      geolocationRoutingPolicies: [{
+        country: "*",
+      }],
+      setIdentifier: "Default",
+    });
     return
   });
 

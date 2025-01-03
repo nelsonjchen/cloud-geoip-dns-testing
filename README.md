@@ -169,7 +169,7 @@ er.net
 PS C:\Users\Nelson>
 ```
 
-As you can see, the CNAME record points to `test-result-`**`us-ca`**`.azure.geoip-test.mindflakes.com`, which seems to indicate that wherever I are resolving from, GeoIP thinks I am close to the **`us-ca`** region in Azure. That region is California in the United States. If you want, you can see a list of the region code mappings in the [./docs/az/trafficManagerGeographicHierarchies.json](./docs/az/trafficManagerGeographicHierarchies.json) file inside this repo.
+As you can see, the CNAME record points to `test-result-`**`us-ca`**`.azure.geoip-test.mindflakes.com`, which seems to indicate that wherever I are resolving from, GeoIP thinks I am close to the **`us-ca`** region in Azure. That region is California in the United States. If you want, you can see a list of the region code mappings in the [./azure-geo-code-list.ts](./azure-geo-code-list.ts) file inside this repo.
 
 # Development
 

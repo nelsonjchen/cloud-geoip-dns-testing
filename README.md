@@ -49,6 +49,12 @@ To install on Ubuntu/Debian:
 sudo apt-get install dnsutils
 ```
 
+To install on Red Hat:
+
+```bash
+sudo dnf install bind-utils
+```
+
 ### Windows
 
 Modern Windows has PowerShell installed. You can use the `Resolve-DnsName` cmdlet to query DNS records. Open PowerShell by searching for it in the Start menu.

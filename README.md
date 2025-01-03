@@ -2,14 +2,16 @@
 
 *Hey DNS, where do you think I am?*
 
-Make sure that your ISP's DNS server or third party DNS server is resolving with the correct results from popular cloud providers via Geolocation via DNS. While this tool is not a comprehensive test of what GeoIP solutions an online service may use and they may very well use many other methods, it does tell you if GeoIP routing via DNS is working for you which can be a big hint to any latency or regional issues you may be experiencing.
+Make sure that your ISP's DNS server or third party DNS server is resolving with the correct results from popular cloud providers via Geolocation via DNS.
+
+While this tool isn’t comprehensive—services can use many other geolocation methods—it does show whether DNS-based GeoIP routing is working. That alone can be a big clue for diagnosing latency or regional issues.
 
 This tool is made of:
 
 * Cloud configuration via Pulumi for myself to configure popular cloud providers to use GeoIP routing in their DNS offerings for you to test against. This isn't really for you but it provides transparency for the testing on how I have set up the DNS records.
 * Simple guide to use the `dig` or PowerShell cmdlet to query a CNAME record with geo-routing. This part is for you.
 
-The rest of this README is that guide explains how to use the infrastructure I've set up to test your DNS server's GeoIP routing.
+The rest of this README explains how to use the infrastructure I've set up to test DNS-based GeoIP routing.
 
 ## Prerequisites
 
@@ -235,6 +237,35 @@ PS C:\Users\Nelson>
 ```
 
 The results are similar to Azure's. The CNAME record points to `test-result-`**`us-ca`**`.aws.geoip-test.mindflakes.com`, which seems to indicate that wherever you are resolving from, GeoIP thinks you are close to the **`us-ca`** region in AWS. That region is California in the United States. If you want, you can see a list of the region code mappings in the [./aws-geo-code-list.ts](./aws-geo-code-list.ts) file inside this repo.
+
+Additionally, you might sometimes see a CNAME indicative of GeoIP errors or fallback. Here is a sample output from a GCP Paris VM when testing against the AWS North America domain:
+
+```
+crazysim@instance-20250103-215639:~$ dig CNAME test.na-geoip-test.aws.geoip-test.mindflakes.com
+
+; <<>> DiG 9.18.28-1~deb12u2-Debian <<>> CNAME test.na-geoip-test.aws.geoip-test.mindflakes.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43922
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;test.na-geoip-test.aws.geoip-test.mindflakes.com. IN CNAME
+
+;; ANSWER SECTION:
+test.na-geoip-test.aws.geoip-test.mindflakes.com. 60 IN CNAME test-result-error-unknown-wrong-continent-maybe.aws.geoip-test.mindflakes.com.
+
+;; Query time: 28 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Fri Jan 03 21:58:24 UTC 2025
+;; MSG SIZE  rcvd: 139
+
+crazysim@instance-20250103-215639:~$
+```
+
+In these cases, please make sure you are testing from a location that is in the continent you are testing against. It could also indicate a real bug in the DNS GeoIP routing system as well.
 
 # Development
 

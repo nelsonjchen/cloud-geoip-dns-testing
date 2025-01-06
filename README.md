@@ -1,4 +1,4 @@
-# 🗺️ Cloud GeoIP via DNS Testing Tool
+# 🗺️ Cloud GeoIP via DNS Test Tool
 
 *Hey DNS, where do you think I am?*
 

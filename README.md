@@ -110,6 +110,7 @@ Here are the domains and notes:
     * `test.na-geoip-test.aws.geoip-test.mindflakes.com`
   * **South America**
     * `test.sa-geoip-test.aws.geoip-test.mindflakes.com`
+  * **Antarctica is omited for cost savings**
 
 ### Query the CNAME Record for the Domain
 

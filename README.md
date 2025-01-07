@@ -4,7 +4,7 @@
 
 Make sure that your ISP's DNS server or a third-party DNS server is returning the correct results from popular cloud providers via DNS-based geolocation.
 
-While this tool isn’t comprehensive—services can use many other geolocation methods—it does show whether DNS-based GeoIP routing is working. That alone can be a big clue for diagnosing latency or regional issues.
+While this tool isn’t comprehensive—services can use many other geolocation methods or geographically route differently with non-DNS methods such as Anycast—it does show whether DNS-based GeoIP routing is working. That alone can be a big clue for diagnosing latency or regional issues.
 
 This tool is made up of:
 
@@ -61,7 +61,7 @@ Modern Windows has PowerShell installed. You can use the `Resolve-DnsName` cmdle
 
 ## Testing
 
-This “tool” works by querying a domain name that can return different responses based on where you’re resolving from.
+This “tool” works by querying a domain name that can return different responses based on where you’re resolving from. The tool tests GeoIP via DNS. It does not test via HTTP or non-DNS.
 
 ### Pick a Domain
 
@@ -72,7 +72,7 @@ For Azure and AWS, test against the continent-determining domain first to see if
 Here are the domains and notes:
 
 * **Google Cloud Platform (GCP)**
-  * Note: GCP’s DNS GeoIP is less granular compared to Azure and AWS. It typically has a few regions tied to data center locations.
+  * Note: GCP’s DNS GeoIP is less granular compared to Azure and AWS. It typically has a few regions tied to Google's datacenter locations.
   * `test.gcp.geoip-test.mindflakes.com`
 * **Azure**
   * Note: Azure has extremely fine-grained DNS GeoIP. Unfortunately, I couldn’t combine all options into a single domain because there’s a maximum of 200 routing options per “traffic manager profile.” For Azure tests, you need the correct domain name for the continent you’re testing from.
@@ -171,7 +171,7 @@ PS C:\Users\Nelson>
 
 ## Understanding the Output
 
-The output shows the CNAME record that was resolved. This record points to a domain associated with the region the DNS GeoIP system believes you’re closest to. In the example above, the record points to `test-result-us-west2.gcp.geoip-test.mindflakes.com`, indicating GeoIP sees you as near the `us-west2` region in Google Cloud Platform. Google Cloud regions can be found [on their site along with the "machine" name for the region](https://cloud.google.com/about/locations).
+The output shows the CNAME record that was resolved. This record points to a domain associated with the region the DNS GeoIP system believes you’re closest to. In the example above, the record points to `test-result-us-west2.gcp.geoip-test.mindflakes.com`, indicating GeoIP sees you as nearest to the `us-west2` region in Google Cloud Platform. Google Cloud regions can be found [on their site along with the "machine" name for the region](https://cloud.google.com/about/locations).
 
 Below is an Azure example. Azure’s GeoIP can be more fine-grained than GCP’s:
 
@@ -312,6 +312,7 @@ Resolve-DnsName -Name test.gcp.geoip-test.mindflakes.com -Type CNAME -Server 8.8
   * Flushing DNS Cache on Linux: `sudo systemd-resolve --flush-caches`
   * These commands can vary by system; consult your documentation.
 * **VPN**: If you’re using a VPN, the GeoIP system will see you as being in the VPN server’s location. This can be useful for testing but may yield misleading results if you’re not trying to appear in that location.
+* **DNS not coming out of your normal traffic route**: It's possible for DNS to take a different route to the internet than your non-DNS traffic. This may affect results.
 * **It’s not perfect**: DNS-based GeoIP routing is just one of many methods that services use to determine your location. It’s not always accurate and can be affected by factors like IP block reassignment and slow updates.
 
 ## Development

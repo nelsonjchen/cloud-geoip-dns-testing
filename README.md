@@ -313,7 +313,7 @@ Resolve-DnsName -Name test.gcp.geoip-test.mindflakes.com -Type CNAME -Server 8.8
   * These commands can vary by system; consult your documentation.
 * **VPN**: If you’re using a VPN, the GeoIP system will see you as being in the VPN server’s location. This can be useful for testing but may yield misleading results if you’re not trying to appear in that location.
 * **DNS not coming out of your normal traffic route**: It's possible for DNS to take a different route to the internet than your non-DNS traffic. This may affect results.
-* **It’s not perfect**: DNS-based GeoIP routing is just one of many methods that services use to determine your location. It’s not always accurate and can be affected by factors like IP block reassignment and slow updates.
+* **It’s not perfect**: DNS-based GeoIP routing is just one of many methods that services use to determine your location. It’s not always accurate and can be affected by factors like IP block reassignment and slow database updates.
 
 ## Development
 

@@ -4,7 +4,7 @@
 
 Make sure that your ISP's DNS server or a third-party DNS server is returning the correct results from popular cloud providers via DNS-based geolocation.
 
-While this tool isn’t comprehensive—services can use many other geolocation methods or geographically route differently with non-DNS methods such as Anycast—it does show whether DNS-based GeoIP routing is working. That alone can be a big clue for diagnosing latency or regional issues.
+While this tool isn’t comprehensive—services can use many other geolocation methods or route traffic differently using non-DNS methods such as Anycast—it is specifically designed to test DNS-based GeoIP routing. DNS-based GeoIP routing works by directing users to region-specific servers based on their IP address as resolved through DNS queries. However, some services use Anycast, a networking technique where the same IP address is advertised from multiple geographic locations, allowing traffic to be routed dynamically to the nearest server based on network topology rather than DNS. Additionally, services may rely on application-level geolocation, such as using a client’s public IP address after a connection is established, to make routing decisions. Despite these complexities, this tool focuses on DNS-based mechanisms, which can still provide valuable insights when diagnosing issues like high latency or unexpected regional behaviors.
 
 This tool is made up of:
 

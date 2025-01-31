@@ -1,6 +1,6 @@
 # 🗺️ Cloud GeoIP via DNS Test Tool
 
-*Hey DNS, where do you think I am?*
+*Hey clouds, where do your DNS servers think I am?*
 
 Make sure that your ISP's DNS server or a third-party DNS server is returning the correct results from popular cloud providers via DNS-based geolocation.
 

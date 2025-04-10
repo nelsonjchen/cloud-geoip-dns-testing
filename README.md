@@ -1,3 +1,5 @@
+## Taken down due to cost.
+
 # 🗺️ Cloud GeoIP via DNS Test Tool
 
 *Hey clouds, where do your DNS servers think I am?*
@@ -318,6 +320,8 @@ Resolve-DnsName -Name test.gcp.geoip-test.mindflakes.com -Type CNAME -Server 8.8
 ## Development
 
 This is a simple Pulumi project specific to my setup that sets up DNS records for GeoIP routing tests. I run `pulumi up` to deploy the infrastructure on my own cloud account. I needed Pulumi installed and configured with multiple cloud providers’ credentials. The estimated cost to run this was about $(0.25+0.50*7)/month, since Google and AWS charges per zone. Other providers charge by query, which should be minimal. We don’t need extra features like monitoring for this test.
+
+edit: this cost too much on azure. Just use this temporaily.
 
 I don’t expect most people to fork/run this themselves, but I’m providing the code for transparency. Feel free to fork or reference it if needed for your own specific testing or scenario.
 
